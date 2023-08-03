@@ -1,23 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import Data from './data'
+
 
 function App() {
+  Data.sort((a, b) => b.points - a.points);
+  const [dataArray, setDataArray] = useState(Data);
+
+  const updatePoints = (id, newPoints) => {
+    setDataArray((prevData) =>
+      prevData.map((record) => {
+        if (record.id === id) {
+          return { ...record, points: newPoints };
+        }
+        return record;
+      })
+    );
+  };
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className='box'>
+    {
+      
+      dataArray.map( record => {
+       return(
+        <div key={record.id}>
+         <h1>{record.name}</h1>
+         <h4>{record.points}</h4>
+         <button onClick={() => updatePoints(record.id, record.points + 1)}>Increase Points</button>
+            <button onClick={() => updatePoints(record.id, record.points - 1)}>Decrease Points</button>
+        </div>
+       )
+      })
+    }
+      </div>
     </div>
   );
 }
